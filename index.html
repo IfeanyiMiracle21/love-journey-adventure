@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Journey Adventure by Ifeanyi</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #000000, #800080, #ff4040);
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            overflow: auto;
+        }
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            text-shadow: 1px 1px 2px rgba(255, 64, 64, 0.2);
+            margin: 1rem 0;
+            text-align: center;
+            color: #ff4040;
+        }
+        #game-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: clamp(15px, 3vw, 25px);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(128, 0, 128, 0.3);
+            width: clamp(300px, 90vw, 500px);
+            text-align: center;
+            border: 2px solid #800080;
+        }
+        #story {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            margin: 1rem 0;
+            color: #d3d3d3;
+        }
+        #choices {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(10px, 2vw, 15px);
+            margin: 1rem 0;
+        }
+        .choice {
+            padding: clamp(8px, 2vw, 12px);
+            background: #2f2f2f;
+            color: #ff4040;
+            border: 2px solid #800080;
+            border-radius: 10px;
+            font-size: clamp(14px, 3vw, 16px);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .choice:hover {
+            background: #800080;
+            color: #fff;
+            transform: scale(1.05);
+        }
+        #progress {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin: 1rem 0;
+            color: #ff4040;
+        }
+        #message {
+            font-size: clamp(1.2rem, 5vw, 1.5rem);
+            margin: 1rem 0;
+            color: #ff4040;
+            display: none;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        #restart {
+            padding: clamp(8px, 2vw, 12px) clamp(15px, 3vw, 20px);
+            font-size: clamp(14px, 4vw, 16px);
+            background: #800080;
+            color: #fff;
+            border: 2px solid #ff4040;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: background 0.3s;
+        }
+        #restart:hover {
+            background: #660066;
+        }
+        footer {
+            position: fixed;
+            bottom: 10px;
+            font-size: clamp(12px, 3vw, 16px);
+            text-shadow: 1px 1px 2px #800080;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ff4040;
+        }
+        footer span {
+            color: #ff4040;
+            font-size: clamp(14px, 3.5vw, 18px);
+        }
+        @media (max-width: 500px) {
+            #game-container {
+                width: 85vw;
+                padding: clamp(10px, 2.5vw, 15px);
+            }
+            #choices {
+                grid-template-columns: 1fr;
+                gap: clamp(8px, 1.5vw, 10px);
+            }
+            .choice {
+                font-size: clamp(12px, 3vw, 14px);
+                padding: clamp(6px, 1.5vw, 8px);
+            }
+            #story {
+                font-size: clamp(1rem, 3.5vw, 1.2rem);
+            }
+            #progress, #message, #restart {
+                font-size: clamp(0.9rem, 2.5vw, 1rem);
+            }
+            footer {
+                font-size: clamp(10px, 2.5vw, 12px);
+                padding: 3px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Love Journey Adventure</h1>
+    <div id="game-container">
+        <div id="story"></div>
+        <div id="choices"></div>
+        <div id="progress">Stage 1 of 10</div>
+        <div id="message"></div>
+        <button id="restart">Restart Adventure</button>
+    </div>
+    <footer>Made with <span>♥</span> by Ifeanyi</footer>
+    <script>
+        const story = [
+            {
+                text: "It all starts back in 100 Level at AAUA! I’m the king of Accounting, and you’re the queen of J&C, both added to the FACE of AAUA group chat. When it’s your turn to introduce yourself, you drop your name, department, and that stunning picture that leaves me speechless—‘Damn, who’s this pretty girl?’ Do I boldly slide into your DM with a nervous ‘Hey, you caught my eye!’ or wait, hoping you’ll notice my profile first?",
+                choices: [
+                    { text: "Slide into DMs", next: 1, player: "You" },
+                    { text: "Wait for her notice", next: 2, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "I bravely DM you, but you leave me on read—twice! A month of silence passes until you post a quirky WhatsApp status. I reply with a clever comment that finally sparks your interest. We start chatting about life, and you ask where I’m from. Do I charm you with ‘Anambra, Igbo pride!’ and a wink, or play it cool with just ‘Anambra’ and see if you guess?",
+                choices: [
+                    { text: "Charm with pride", next: 3, player: "You" },
+                    { text: "Play it cool", next: 4, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "You notice me first, and after a shy group chat exchange, we connect! Soon, we meet in person, and I trust you with my phone during exams—you even make funny videos with my password! Do I melt your heart by thanking you with a big hug, or keep it light with a playful ‘Nice camera work!’?",
+                choices: [
+                    { text: "Big hug thanks", next: 5, player: "You" },
+                    { text: "Playful comment", next: 6, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "Our chats turn into calls during the vacay—three, four-hour marathons of laughs and bonding! I catch feelings, but you friend-zone me, even sharing about another guy. Hurt, I pull back. Do I send a cheeky ‘Miss me yet?’ to test the waters, or wait for you to call me out on my change?",
+                choices: [
+                    { text: "Cheeky message", next: 7, player: "You" },
+                    { text: "Wait for her call", next: 8, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "You notice my distance and call, upset I’ve changed. We reconnect, and when school resumes, you invite me over with a warm welcome—lifting me like a treasure and insisting I eat! Do I dive in with a goofy ‘Okay, chef Anisha!’ or tease back with ‘Only if you feed me!’?",
+                choices: [
+                    { text: "Goofy chef nod", next: 9, player: "You" },
+                    { text: "Tease about feeding", next: 10, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "Our bond deepens with that visit, but my bold question about your past sparks tension—you’re angry at first! Do I back off with an apologetic ‘Sorry, too soon,’ or try to lighten it with a nervous laugh and ‘Just curious!’?",
+                choices: [
+                    { text: "Apologetic back-off", next: 11, player: "You" },
+                    { text: "Nervous laugh", next: 12, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "You soften after my apology, and later, when you visit again, I ask once more. This time, you open up, leading to our first kiss! Do I deepen the moment with a gentle ‘You mean so much,’ or keep it playful with ‘Best kiss ever, huh?’?",
+                choices: [
+                    { text: "Gentle words", next: 13, player: "You" },
+                    { text: "Playful brag", next: 14, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "That kiss turns into our first night together, and the next morning, I’m on cloud nine! Do I propose with a heartfelt ‘Anisha, will you be my girlfriend?’ or a cheeky ‘Ready to rule AAUA with me?’?",
+                choices: [
+                    { text: "Heartfelt proposal", next: 15, player: "You" },
+                    { text: "Cheeky ruler ask", next: 16, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "We’re official! A month in, we plan a cozy movie night. Do I pick a romantic flick to cuddle up, or a comedy to keep the laughs going?",
+                choices: [
+                    { text: "Romantic movie", next: 17, player: "You" },
+                    { text: "Comedy night", next: 18, player: "Girlfriend" }
+                ]
+            },
+            {
+                text: "Our relationship grows, and it’s almost National Girlfriend Day! Do I surprise you with a handwritten note, or plan a special dinner to celebrate us?",
+                choices: [
+                    { text: "Handwritten note", outcome: "happy" },
+                    { text: "Special dinner", outcome: "happy" }
+                ],
+                player: "Both"
+            }
+        ];
+        let currentStage = 0;
+        let playerTurn = "You";
+
+        const storyDiv = document.getElementById('story');
+        const choicesDiv = document.getElementById('choices');
+        const progressDiv = document.getElementById('progress');
+        const messageDiv = document.getElementById('message');
+        const restartButton = document.getElementById('restart');
+
+        function loadStage() {
+            const stage = story[currentStage];
+            storyDiv.textContent = stage.text;
+            choicesDiv.innerHTML = '';
+            stage.choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.className = 'choice';
+                button.textContent = choice.text;
+                button.addEventListener('click', () => makeChoice(choice));
+                choicesDiv.appendChild(button);
+            });
+            progressDiv.textContent = `Stage ${currentStage + 1} of ${story.length}`;
+            messageDiv.style.display = 'none';
+            if (stage.player) playerTurn = stage.player;
+        }
+
+        function makeChoice(choice) {
+            if (choice.outcome) {
+                messageDiv.textContent = `Adventure Complete! Happy National Girlfriend Day, Anisha—we’ve built an amazing journey together!`;
+                messageDiv.style.display = 'block';
+                choicesDiv.style.display = 'none';
+            } else {
+                currentStage = choice.next;
+                playerTurn = choice.player === "You" ? "Girlfriend" : "You";
+                setTimeout(loadStage, 2000);
+            }
+        }
+
+        function resetGame() {
+            currentStage = 0;
+            playerTurn = "You";
+            progressDiv.textContent = `Stage 1 of ${story.length}`;
+            messageDiv.style.display = 'none';
+            choicesDiv.style.display = 'grid';
+            loadStage();
+        }
+
+        restartButton.addEventListener('click', resetGame);
+        loadStage();
+    </script>
+</body>
+</html>
