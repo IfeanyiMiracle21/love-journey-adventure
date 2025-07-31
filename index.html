@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Journey Adventure by Ifeanyi</title>
+    <title>Our Love Story by Ifeanyi</title>
     <style>
         body {
             margin: 0;
@@ -24,7 +24,7 @@
             text-align: center;
             color: #ff4040;
         }
-        #game-container {
+        #story-container {
             background: rgba(255, 255, 255, 0.05);
             padding: clamp(15px, 3vw, 25px);
             border-radius: 15px;
@@ -37,41 +37,9 @@
             font-size: clamp(1.2rem, 4vw, 1.5rem);
             margin: 1rem 0;
             color: #d3d3d3;
+            line-height: 1.6;
         }
-        #choices {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: clamp(10px, 2vw, 15px);
-            margin: 1rem 0;
-        }
-        .choice {
-            padding: clamp(8px, 2vw, 12px);
-            background: #2f2f2f;
-            color: #ff4040;
-            border: 2px solid #800080;
-            border-radius: 10px;
-            font-size: clamp(14px, 3vw, 16px);
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-        .choice:hover {
-            background: #800080;
-            color: #fff;
-            transform: scale(1.05);
-        }
-        #progress {
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            margin: 1rem 0;
-            color: #ff4040;
-        }
-        #message {
-            font-size: clamp(1.2rem, 5vw, 1.5rem);
-            margin: 1rem 0;
-            color: #ff4040;
-            display: none;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-        #restart {
+        #next-button {
             padding: clamp(8px, 2vw, 12px) clamp(15px, 3vw, 20px);
             font-size: clamp(14px, 4vw, 16px);
             background: #800080;
@@ -82,8 +50,15 @@
             margin: 1rem 0;
             transition: background 0.3s;
         }
-        #restart:hover {
+        #next-button:hover {
             background: #660066;
+        }
+        #message {
+            font-size: clamp(1.2rem, 5vw, 1.5rem);
+            margin: 1rem 0;
+            color: #ff4040;
+            display: none;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
         footer {
             position: fixed;
@@ -101,22 +76,18 @@
             font-size: clamp(14px, 3.5vw, 18px);
         }
         @media (max-width: 500px) {
-            #game-container {
+            #story-container {
                 width: 85vw;
                 padding: clamp(10px, 2.5vw, 15px);
-            }
-            #choices {
-                grid-template-columns: 1fr;
-                gap: clamp(8px, 1.5vw, 10px);
-            }
-            .choice {
-                font-size: clamp(12px, 3vw, 14px);
-                padding: clamp(6px, 1.5vw, 8px);
             }
             #story {
                 font-size: clamp(1rem, 3.5vw, 1.2rem);
             }
-            #progress, #message, #restart {
+            #next-button {
+                font-size: clamp(12px, 3vw, 14px);
+                padding: clamp(6px, 1.5vw, 10px);
+            }
+            #message {
                 font-size: clamp(0.9rem, 2.5vw, 1rem);
             }
             footer {
@@ -127,136 +98,50 @@
     </style>
 </head>
 <body>
-    <h1>Love Journey Adventure</h1>
-    <div id="game-container">
+    <h1>Our Love Story</h1>
+    <div id="story-container">
         <div id="story"></div>
-        <div id="choices"></div>
-        <div id="progress">Stage 1 of 10</div>
+        <button id="next-button">Next</button>
         <div id="message"></div>
-        <button id="restart">Restart Adventure</button>
     </div>
     <footer>Made with <span>♥</span> by Ifeanyi</footer>
     <script>
         const story = [
-            {
-                text: "It all starts back in 100 Level at AAUA! I’m the king of Accounting, and you’re the queen of J&C, both added to the FACE of AAUA group chat. When it’s your turn to introduce yourself, you drop your name, department, and that stunning picture that leaves me speechless—‘Damn, who’s this pretty girl?’ Do I boldly slide into your DM with a nervous ‘Hey, you caught my eye!’ or wait, hoping you’ll notice my profile first?",
-                choices: [
-                    { text: "Slide into DMs", next: 1, player: "You" },
-                    { text: "Wait for her notice", next: 2, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "I bravely DM you, but you leave me on read—twice! A month of silence passes until you post a quirky WhatsApp status. I reply with a clever comment that finally sparks your interest. We start chatting about life, and you ask where I’m from. Do I charm you with ‘Anambra, Igbo pride!’ and a wink, or play it cool with just ‘Anambra’ and see if you guess?",
-                choices: [
-                    { text: "Charm with pride", next: 3, player: "You" },
-                    { text: "Play it cool", next: 4, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "You notice me first, and after a shy group chat exchange, we connect! Soon, we meet in person, and I trust you with my phone during exams—you even make funny videos with my password! Do I melt your heart by thanking you with a big hug, or keep it light with a playful ‘Nice camera work!’?",
-                choices: [
-                    { text: "Big hug thanks", next: 5, player: "You" },
-                    { text: "Playful comment", next: 6, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "Our chats turn into calls during the vacay—three, four-hour marathons of laughs and bonding! I catch feelings, but you friend-zone me, even sharing about another guy. Hurt, I pull back. Do I send a cheeky ‘Miss me yet?’ to test the waters, or wait for you to call me out on my change?",
-                choices: [
-                    { text: "Cheeky message", next: 7, player: "You" },
-                    { text: "Wait for her call", next: 8, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "You notice my distance and call, upset I’ve changed. We reconnect, and when school resumes, you invite me over with a warm welcome—lifting me like a treasure and insisting I eat! Do I dive in with a goofy ‘Okay, chef Anisha!’ or tease back with ‘Only if you feed me!’?",
-                choices: [
-                    { text: "Goofy chef nod", next: 9, player: "You" },
-                    { text: "Tease about feeding", next: 10, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "Our bond deepens with that visit, but my bold question about your past sparks tension—you’re angry at first! Do I back off with an apologetic ‘Sorry, too soon,’ or try to lighten it with a nervous laugh and ‘Just curious!’?",
-                choices: [
-                    { text: "Apologetic back-off", next: 11, player: "You" },
-                    { text: "Nervous laugh", next: 12, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "You soften after my apology, and later, when you visit again, I ask once more. This time, you open up, leading to our first kiss! Do I deepen the moment with a gentle ‘You mean so much,’ or keep it playful with ‘Best kiss ever, huh?’?",
-                choices: [
-                    { text: "Gentle words", next: 13, player: "You" },
-                    { text: "Playful brag", next: 14, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "That kiss turns into our first night together, and the next morning, I’m on cloud nine! Do I propose with a heartfelt ‘Anisha, will you be my girlfriend?’ or a cheeky ‘Ready to rule AAUA with me?’?",
-                choices: [
-                    { text: "Heartfelt proposal", next: 15, player: "You" },
-                    { text: "Cheeky ruler ask", next: 16, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "We’re official! A month in, we plan a cozy movie night. Do I pick a romantic flick to cuddle up, or a comedy to keep the laughs going?",
-                choices: [
-                    { text: "Romantic movie", next: 17, player: "You" },
-                    { text: "Comedy night", next: 18, player: "Girlfriend" }
-                ]
-            },
-            {
-                text: "Our relationship grows, and it’s almost National Girlfriend Day! Do I surprise you with a handwritten note, or plan a special dinner to celebrate us?",
-                choices: [
-                    { text: "Handwritten note", outcome: "happy" },
-                    { text: "Special dinner", outcome: "happy" }
-                ],
-                player: "Both"
-            }
+            "It all started back in 100 Level at AAUA. I was known as the king of Accounting—confident, ambitious, maybe a little too proud. She, the radiant queen of Guidance and Counselling, J&C for short, was elegant, smart, and effortlessly beautiful. We both found ourselves in a group chat for FACE of AAUA contestants. Fate had just opened the first page of our story.",
+            "In the group, we introduced ourselves—names, departments, pictures. Then it was her turn. She shared her name, J&C, and that picture. My heart paused. I whispered, ‘Damn… who is this girl?’ Her smile was poetry, her eyes galaxies I wanted to explore. I couldn’t resist and slid into her DMs. No reply. I tried again—silence. But I felt she was meant to be mine.",
+            "After many tries, she finally responded briefly—‘I’m Anisha.’ A month of silence followed until her quirky WhatsApp status gave me a chance. I replied playfully, sincerely, and it worked. We started chatting. She asked where I was from. ‘Anambra,’ I said. She smiled, ‘You’re Igbo, right?’ Her warmth drew me in.",
+            "We met in person soon after. I trusted her instantly, handing her my phone during an exam—no password hidden. She collected my tally and made funny videos. When I saw them, I laughed, feeling love stir. That day, she wasn’t just a pretty face—she felt like home.",
+            "School vacated, and we returned to our cities. Chats turned to hours-long calls—laughter, jokes, her voice saying my name like music. I fell deeply, but when I confessed, she friend-zoned me, mentioning another guy. It hurt, so I pulled back to protect my heart.",
+            "She noticed my distance and called, upset I’d changed. That meant she cared. When school resumed, she invited me over, lifted me like a treasure, and insisted I eat. I gave in, my heart full. The next day, she visited me too.",
+            "During one visit, I asked if she was still a virgin—too personal, too soon. She was angry, and I apologized, not wanting to hurt her. Later, with more trust, I asked again. She opened up, and that night, we kissed—soft, then deep, like a love song.",
+            "Our kiss led to a night of love, a melody that slowed the world. The next morning, sunlight poured like honey as I looked into her eyes and asked, ‘Will you be my girlfriend?’ She said yes, and our hearts truly began their dance.",
+            "A month as a couple brought a cozy movie night. We cuddled, laughed, and grew closer, our story weaving tighter with every moment.",
+            "Now, as National Girlfriend Day nears, our love deepens. This journey from a group chat to a lifetime feels like destiny."
         ];
         let currentStage = 0;
-        let playerTurn = "You";
 
         const storyDiv = document.getElementById('story');
-        const choicesDiv = document.getElementById('choices');
-        const progressDiv = document.getElementById('progress');
+        const nextButton = document.getElementById('next-button');
         const messageDiv = document.getElementById('message');
-        const restartButton = document.getElementById('restart');
 
         function loadStage() {
-            const stage = story[currentStage];
-            storyDiv.textContent = stage.text;
-            choicesDiv.innerHTML = '';
-            stage.choices.forEach(choice => {
-                const button = document.createElement('button');
-                button.className = 'choice';
-                button.textContent = choice.text;
-                button.addEventListener('click', () => makeChoice(choice));
-                choicesDiv.appendChild(button);
-            });
-            progressDiv.textContent = `Stage ${currentStage + 1} of ${story.length}`;
-            messageDiv.style.display = 'none';
-            if (stage.player) playerTurn = stage.player;
-        }
-
-        function makeChoice(choice) {
-            if (choice.outcome) {
-                messageDiv.textContent = `Adventure Complete! Happy National Girlfriend Day, Anisha—we’ve built an amazing journey together!`;
-                messageDiv.style.display = 'block';
-                choicesDiv.style.display = 'none';
+            if (currentStage < story.length) {
+                storyDiv.textContent = story[currentStage];
+                nextButton.style.display = 'block';
+                messageDiv.style.display = 'none';
             } else {
-                currentStage = choice.next;
-                playerTurn = choice.player === "You" ? "Girlfriend" : "You";
-                setTimeout(loadStage, 2000);
+                storyDiv.textContent = '';
+                messageDiv.textContent = "Happy Girlfriend's Day, Asam❤️💍";
+                messageDiv.style.display = 'block';
+                nextButton.style.display = 'none';
             }
         }
 
-        function resetGame() {
-            currentStage = 0;
-            playerTurn = "You";
-            progressDiv.textContent = `Stage 1 of ${story.length}`;
-            messageDiv.style.display = 'none';
-            choicesDiv.style.display = 'grid';
+        nextButton.addEventListener('click', () => {
+            currentStage++;
             loadStage();
-        }
+        });
 
-        restartButton.addEventListener('click', resetGame);
         loadStage();
     </script>
 </body>
