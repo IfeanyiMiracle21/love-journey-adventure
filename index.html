@@ -39,7 +39,12 @@
             color: #d3d3d3;
             line-height: 1.6;
         }
-        #next-button {
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+        }
+        #prev-button, #next-button {
             padding: clamp(8px, 2vw, 12px) clamp(15px, 3vw, 20px);
             font-size: clamp(14px, 4vw, 16px);
             background: #800080;
@@ -47,12 +52,14 @@
             border: 2px solid #ff4040;
             border-radius: 10px;
             cursor: pointer;
-            float: right;
-            margin: 1rem 0;
             transition: background 0.3s;
         }
-        #next-button:hover {
+        #prev-button:hover, #next-button:hover {
             background: #660066;
+        }
+        #prev-button:disabled, #next-button:disabled {
+            background: #4b004b;
+            cursor: not-allowed;
         }
         #message {
             font-size: clamp(1.2rem, 5vw, 1.5rem);
@@ -84,7 +91,7 @@
             #story {
                 font-size: clamp(1rem, 3.5vw, 1.2rem);
             }
-            #next-button {
+            #prev-button, #next-button {
                 font-size: clamp(12px, 3vw, 14px);
                 padding: clamp(6px, 1.5vw, 10px);
             }
@@ -102,7 +109,10 @@
     <h1>Our Story: From Strangers to Soulmates</h1>
     <div id="story-container">
         <div id="story"></div>
-        <button id="next-button">Next</button>
+        <div class="nav-buttons">
+            <button id="prev-button" style="display: none;">Prev</button>
+            <button id="next-button">Next</button>
+        </div>
         <div id="message"></div>
     </div>
     <footer>Made with <span>♥</span> by Ifeanyi</footer>
@@ -122,25 +132,41 @@
         let currentStage = 0;
 
         const storyDiv = document.getElementById('story');
+        const prevButton = document.getElementById('prev-button');
         const nextButton = document.getElementById('next-button');
         const messageDiv = document.getElementById('message');
 
         function loadStage() {
+            if (currentStage === 0) {
+                prevButton.style.display = 'none';
+            } else {
+                prevButton.style.display = 'inline-block';
+            }
             if (currentStage < story.length) {
                 storyDiv.textContent = story[currentStage];
-                nextButton.style.display = 'block';
+                nextButton.style.display = 'inline-block';
                 messageDiv.style.display = 'none';
             } else {
                 storyDiv.textContent = '';
                 messageDiv.textContent = "Happy Girlfriend's Day, Asam❤️💍";
                 messageDiv.style.display = 'block';
                 nextButton.style.display = 'none';
+                prevButton.style.display = 'inline-block';
             }
         }
 
         nextButton.addEventListener('click', () => {
-            currentStage++;
-            loadStage();
+            if (currentStage < story.length) {
+                currentStage++;
+                loadStage();
+            }
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentStage > 0) {
+                currentStage--;
+                loadStage();
+            }
         });
 
         loadStage();
